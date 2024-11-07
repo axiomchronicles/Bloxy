@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloxy User Review</title>
+    <!-- Include Tailwind CSS via CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .star-rating input:checked~label {
+            color: gold;
+            transform: scale(1.2);
+        }
+
+        .star-rating label {
+            color: lightgray;
+            font-size: 2.5em;
+            cursor: pointer;
+            transition: transform 0.2s, color 0.2s;
+        }
+
+        .star-rating label:hover,
+        .star-rating label:hover~label {
+            color: gold;
+        }
+
+        .form-section {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            background-color: #ffffff;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .form-section:hover {
+            background-color: #f1f5f9;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .form-header {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-label {
+            color: #4b5563;
+        }
+
+        .form-input,
+        .form-textarea {
+            border: 2px solid #d1d5db;
+            border-radius: 0.375rem;
+            padding: 0.75rem;
+            width: 100%;
+            background-color: #f9fafb;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            border-color: #2563eb;
+            outline: none;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+        }
+
+        .submit-button {
+            background-color: #3b82f6;
+            color: #ffffff;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .submit-button:hover {
+            background-color: #2563eb;
+            transform: scale(1.05);
+        }
+
+        .submit-button:focus {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 40px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 p-6">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-xl p-8 fade-in">
+        <h1 class="text-4xl font-bold mb-8 text-center text-blue-700">Bloxy User Review</h1>
+        <div id="loader" class="loader hidden"></div>
+        <div id="alert" class="hidden"></div>
+        <form id="surveyForm" class="space-y-6">
+            <!-- Personal Information -->
+            <div class="form-section">
+                <div class="form-header mb-4">Personal Information</div>
+                <div class="mb-4">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" id="name" name="name" class="form-input" required>
+                </div>
+                <div class="mb-4">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" name="email" class="form-input" required>
+                </div>
+            </div>
+
+            <!-- Visit Frequency -->
+            <div class="form-section">
+                <div class="form-header mb-4">Visit Frequency</div>
+                <label class="form-label">How often do you visit Bloxy?</label>
+                <select name="frequency" class="form-input" required>
+                    <option value="" disabled selected>Select an option</option>
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="rarely">Rarely</option>
+                </select>
+            </div>
+
+            <!-- Blog Quality -->
+            <div class="form-section">
+                <div class="form-header mb-4">Blog Quality</div>
+                <label class="form-label">How do you rate the quality of our blog content?</label>
+                <div class="mt-2 space-y-2">
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="blogQuality" value="Excellent" class="form-radio text-blue-600" required>
+                        <span class="ml-2">Excellent</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="blogQuality" value="Good" class="form-radio text-blue-600">
+                        <span class="ml-2">Good</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="blogQuality" value="Average" class="form-radio text-blue-600">
+                        <span class="ml-2">Average</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="blogQuality" value="Poor" class="form-radio text-blue-600">
+                        <span class="ml-2">Poor</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Favorite Blog Topics -->
+            <div class="form-section">
+                <div class="form-header mb-4">Favorite Blog Topics</div>
+                <label for="favoriteBlogs" class="form-label">Which blog topics do you enjoy the most?</label>
+                <input type="text" id="favoriteBlogs" name="favoriteBlogs" class="form-input">
+            </div>
+
+            <!-- Writing Experience -->
+            <div class="form-section">
+                <div class="form-header mb-4">Writing Experience</div>
+                <label class="form-label">How do you rate the ease of writing blogs on Bloxy?</label>
+                <div class="mt-2 space-y-2">
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="writingEase" value="Very Easy" class="form-radio text-blue-600" required>
+                        <span class="ml-2">Very Easy</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="writingEase" value="Easy" class="form-radio text-blue-600">
+                        <span class="ml-2">Easy</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="writingEase" value="Neutral" class="form-radio text-blue-600">
+                        <span class="ml-2">Neutral</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="writingEase" value="Difficult" class="form-radio text-blue-600">
+                        <span class="ml-2">Difficult</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="writingEase" value="Very Difficult" class="form-radio text-blue-600">
+                        <span class="ml-2">Very Difficult</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- News Satisfaction -->
+            <div class="form-section">
+                <div class="form-header mb-4">News Satisfaction</div>
+                <label class="form-label">How satisfied are you with our news section?</label>
+                <div class="mt-2 space-y-2">
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="newsSatisfaction" value="Very Satisfied" class="form-radio text-blue-600" required>
+                        <span class="ml-2">Very Satisfied</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="newsSatisfaction" value="Satisfied" class="form-radio text-blue-600">
+                        <span class="ml-2">Satisfied</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="newsSatisfaction" value="Neutral" class="form-radio text-blue-600">
+                        <span class="ml-2">Neutral</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="newsSatisfaction" value="Dissatisfied" class="form-radio text-blue-600">
+                        <span class="ml-2">Dissatisfied</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="newsSatisfaction" value="Very Dissatisfied" class="form-radio text-blue-600">
+                        <span class="ml-2">Very Dissatisfied</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Overall Experience Rating -->
+            <div class="form-section">
+                <div class="form-header mb-4">Overall Experience</div>
+                <label class="form-label">How would you rate your overall experience on Bloxy?</label>
+                <div class="star-rating mt-2">
+                    <input type="radio" id="star5" name="overallExperience" value="5" class="hidden" required>
+                    <label for="star5" title="5 stars">☆</label>
+                    <input type="radio" id="star4" name="overallExperience" value="4" class="hidden">
+                    <label for="star4" title="4 stars">☆</label>
+                    <input type="radio" id="star3" name="overallExperience" value="3" class="hidden">
+                    <label for="star3" title="3 stars">☆</label>
+                    <input type="radio" id="star2" name="overallExperience" value="2" class="hidden">
+                    <label for="star2" title="2 stars">☆</label>
+                    <input type="radio" id="star1" name="overallExperience" value="1" class="hidden">
+                    <label for="star1" title="1 star">☆</label>
+                </div>
+            </div>
+
+            <!-- Website Review -->
+            <div class="form-section">
+                <div class="form-header mb-4">Website Review</div>
+                <label for="websiteReview" class="form-label">Please provide your review of our website</label>
+                <textarea id="websiteReview" name="websiteReview" rows="4" class="form-textarea"></textarea>
+            </div>
+
+            <!-- Bugs/Error Reporting -->
+            <div class="form-section">
+                <div class="form-header mb-4">Bugs/Error Reporting</div>
+                <label for="bugsErrors" class="form-label">Have you encountered any bugs or errors? Please describe.</label>
+                <textarea id="bugsErrors" name="bugsErrors" rows="4" class="form-textarea"></textarea>
+            </div>
+
+            <!-- Improvement Suggestions -->
+            <div class="form-section">
+                <div class="form-header mb-4">Improvement Suggestions</div>
+                <label for="improvements" class="form-label">What improvements would you like to see on Bloxy?</label>
+                <textarea id="improvements" name="improvements" rows="4" class="form-textarea"></textarea>
+            </div>
+
+            <!-- Additional Feedback -->
+            <div class="form-section">
+                <div class="form-header mb-4">Additional Feedback</div>
+                <label for="additionalFeedback" class="form-label">Any additional feedback or comments?</label>
+                <textarea id="additionalFeedback" name="additionalFeedback" rows="4" class="form-textarea"></textarea>
+            </div>
+
+            <!-- Form Submission -->
+            <div class="flex items-center justify-center mt-6">
+                <button type="submit" class="submit-button">Submit</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        document.getElementById('surveyForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Show loader
+            document.getElementById('loader').classList.remove('hidden');
+
+            // Collect form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            // Send POST request
+            try {
+                const response = await fetch('http://localhost:29518/bloxy/api/review', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                // Hide loader
+                document.getElementById('loader').classList.add('hidden');
+
+                if (response.ok) {
+                    showAlert('Thank you for your feedback! We appreciate your time.', 'success');
+                } else {
+                    response.json().then(responseData => {
+                        showAlert(responseData.error, 'error');
+                    }).catch(error => {
+                        showAlert('An unexpected error occurred. Please try again later.', 'error');
+                    });
+                }
+            } catch (error) {
+                // Hide loader
+                document.getElementById('loader').classList.add('hidden');
+
+                showAlert('Failed to submit the form. Please check your network connection.', 'error');
+            }
+        });
+
+        function showAlert(message, type) {
+            const alert = document.getElementById('alert');
+            alert.textContent = message;
+            alert.className = `fixed bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-3 rounded-lg ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white shadow-lg`;
+            alert.classList.remove('hidden');
+
+            setTimeout(() => {
+                alert.classList.add('hidden');
+            }, 5000); // Hide after 5 seconds
+        }
+    </script>
+</body>
+
+</html>

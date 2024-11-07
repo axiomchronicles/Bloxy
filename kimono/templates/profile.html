@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>User Profile</title>
+    <!-- Bootstrap CSS CDN -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome CDN for Icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+
+        .profile-card {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 40px 30px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #007bff;
+            margin-bottom: 20px;
+        }
+
+        .profile-card h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .profile-card p {
+            font-size: 1rem;
+            color: #6c757d;
+            margin-bottom: 20px;
+        }
+
+        .info-block {
+            text-align: left;
+            margin-top: 30px;
+        }
+
+        .info-block h5 {
+            font-size: 1.2rem;
+            color: #343a40;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .info-block .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .info-block label {
+            font-weight: 500;
+            color: #495057;
+        }
+
+        .form-control-plaintext {
+            color: #000;
+            font-weight: 600;
+        }
+
+        .toggle-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .toggle-group:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-group label {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #495057;
+        }
+
+        .social-icons a {
+            margin: 0 10px;
+            font-size: 1.5rem;
+            color: #007bff;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #0056b3;
+        }
+
+        .custom-switch .custom-control-input:checked ~ .custom-control-label::before {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="profile-card">
+            <img src="https://via.placeholder.com/150" alt="Avatar" class="profile-avatar">
+            <h2>{{ userProfile.name }}</h2>
+            <p class="text-muted">Full Stack Developer</p>
+            <p class="text-muted">Last Login: {{ userProfile.last_login }}</p>
+
+            <!-- User Information Block -->
+            <div class="info-block">
+                <h5>User Information</h5>
+                <form>
+                    <div class="form-group row">
+                        <label for="fullName" class="col-sm-4 col-form-label">Full Name:</label>
+                        <div class="col-sm-8">
+                            <input type="text" readonly class="form-control-plaintext" id="fullName" value="{{ userProfile.name }}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="email" class="col-sm-4 col-form-label">Email:</label>
+                        <div class="col-sm-8">
+                            <input type="email" readonly class="form-control-plaintext" id="email" value="{{ userProfile.email }}">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Settings Block -->
+            <div class="info-block">
+                <h5>Account Settings</h5>
+                <!-- Toggle for 2FA -->
+                <div class="toggle-group">
+                    <label for="twoFactor">Two-Factor Authentication (2FA):</label>
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="twoFactor">
+                        <label class="custom-control-label" for="twoFactor"></label>
+                    </div>
+                </div>
+                <!-- Toggle for Email Notifications -->
+                <div class="toggle-group">
+                    <label for="emailNotif">Email Notifications:</label>
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="emailNotif" checked>
+                        <label class="custom-control-label" for="emailNotif"></label>
+                    </div>
+                </div>
+                <!-- Toggle for Dark Mode -->
+                <div class="toggle-group">
+                    <label for="darkMode">Enable Dark Mode:</label>
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="darkMode">
+                        <label class="custom-control-label" for="darkMode"></label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Media Icons -->
+            <div class="social-icons mt-4">
+                <a href="#" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS CDN (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

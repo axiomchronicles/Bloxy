@@ -1,0 +1,12 @@
+/* Spinner (using Bootstrap classes) */
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+    display: none;
+    margin: 20px auto;
+}
+
+/* Alert (using Bootstrap classes) */
+.alert {
+    display: none;
+}

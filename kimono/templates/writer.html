@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600&family=Satisfy&display=swap"
+        rel="stylesheet">
+
+    <title>Bloxy</title>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f7f8fa;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 0.5rem;
+            border: 1px solid #ced4da;
+            transition: all 0.2s;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            box-shadow: none;
+            border-color: #007bff;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.25rem;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .spinner-border {
+            display: none;
+        }
+
+        .character-count {
+            font-size: 0.9rem;
+            color: #6c757d;
+            text-align: right;
+        }
+
+        .toast-container {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            z-index: 1050;
+        }
+
+        .tag-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border: 1px solid #ced4da;
+            border-radius: 0.5rem;
+        }
+
+        .tag-input input {
+            border: none;
+            outline: none;
+            flex-grow: 1;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            background-color: #e9ecef;
+            border-radius: 0.25rem;
+            padding: 0.25rem 0.5rem;
+        }
+
+        .tag .remove-tag {
+            margin-left: 0.25rem;
+            cursor: pointer;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            height: auto;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+
+<body class="homepage">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bolder" href="/bloxy/dashboard">Bloxy</a>
+            <button class="navbar-toggler border-0 p-0" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/bloxy/dashboard">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        {% if user %}
+                        <a class="nav-link text-primary" href="#">{{ user.name }}</a>
+                        {% else %}
+                        <a class="nav-link text-primary" href="/login.html">Sign In</a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Posts -->
+    <section class="posts mb-4 mt-5 pt-5">
+        <div class="container">
+            <div class="row">
+                <!-- Blog Post Form -->
+                <div class="col-lg-8 mx-auto">
+                    <h2 class="mb-4">Create a New Blog Post</h2>
+                    <form id="blogForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="title" name="title" placeholder="Enter your blog title here" maxlength="100" required>
+                            <div class="character-count" id="title-count">0/100</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Category</label>
+                            <select class="form-select" id="category" name="category" aria-label="Select Category" required>
+                                <option selected disabled value="">Choose category</option>
+                        
+                                <!-- Technology & Science -->
+                                <optgroup label="Technology & Science">
+                                    <option value="technology">Technology</option>
+                                    <option value="science">Science</option>
+                                    <option value="gadgets">Gadgets</option>
+                                    <option value="artificial-intelligence">Artificial Intelligence</option>
+                                    <option value="software">Software</option>
+                                    <option value="innovation">Innovation</option>
+                                    <option value="space">Space</option>
+                                    <option value="engineering">Engineering</option>
+                                    <option value="biotechnology">Biotechnology</option>
+                                    <option value="research">Research</option>
+                                </optgroup>
+                        
+                                <!-- Business, Finance & Economy -->
+                                <optgroup label="Business, Finance & Economy">
+                                    <option value="business">Business</option>
+                                    <option value="economy">Economy</option>
+                                    <option value="finance">Finance</option>
+                                    <option value="entrepreneurship">Entrepreneurship</option>
+                                    <option value="marketing">Marketing</option>
+                                    <option value="real-estate">Real Estate</option>
+                                    <option value="investing">Investing</option>
+                                    <option value="startups">Startups</option>
+                                    <option value="e-commerce">E-commerce</option>
+                                    <option value="cryptocurrency">Cryptocurrency</option>
+                                </optgroup>
+                        
+                                <!-- Lifestyle & Personal Growth -->
+                                <optgroup label="Lifestyle & Personal Growth">
+                                    <option value="lifestyle">Lifestyle</option>
+                                    <option value="wellness">Wellness</option>
+                                    <option value="self-improvement">Self-Improvement</option>
+                                    <option value="relationships">Relationships</option>
+                                    <option value="mental-health">Mental Health</option>
+                                    <option value="spirituality">Spirituality</option>
+                                    <option value="fashion">Fashion</option>
+                                    <option value="beauty">Beauty</option>
+                                    <option value="home-decor">Home Decor</option>
+                                    <option value="parenting">Parenting</option>
+                                </optgroup>
+                        
+                                <!-- Travel, Food & Leisure -->
+                                <optgroup label="Travel, Food & Leisure">
+                                    <option value="travel">Travel</option>
+                                    <option value="food">Food</option>
+                                    <option value="recipes">Recipes</option>
+                                    <option value="adventure">Adventure</option>
+                                    <option value="hotels">Hotels</option>
+                                    <option value="restaurants">Restaurants</option>
+                                    <option value="local-culture">Local Culture</option>
+                                    <option value="luxury-travel">Luxury Travel</option>
+                                </optgroup>
+                        
+                                <!-- Entertainment, Media & Culture -->
+                                <optgroup label="Entertainment, Media & Culture">
+                                    <option value="entertainment">Entertainment</option>
+                                    <option value="movies">Movies</option>
+                                    <option value="tv-shows">TV Shows</option>
+                                    <option value="music">Music</option>
+                                    <option value="books">Books</option>
+                                    <option value="celebrity-news">Celebrity News</option>
+                                    <option value="art">Art</option>
+                                    <option value="culture">Culture</option>
+                                    <option value="theater">Theater</option>
+                                    <option value="podcasts">Podcasts</option>
+                                </optgroup>
+                        
+                                <!-- Sports & Recreation -->
+                                <optgroup label="Sports & Recreation">
+                                    <option value="sports">Sports</option>
+                                    <option value="fitness">Fitness</option>
+                                    <option value="outdoors">Outdoors</option>
+                                    <option value="adventure-sports">Adventure Sports</option>
+                                    <option value="running">Running</option>
+                                    <option value="cycling">Cycling</option>
+                                    <option value="yoga">Yoga</option>
+                                    <option value="hiking">Hiking</option>
+                                    <option value="team-sports">Team Sports</option>
+                                    <option value="martial-arts">Martial Arts</option>
+                                </optgroup>
+                        
+                                <!-- Health & Wellness -->
+                                <optgroup label="Health & Wellness">
+                                    <option value="health">Health</option>
+                                    <option value="nutrition">Nutrition</option>
+                                    <option value="mental-health">Mental Health</option>
+                                    <option value="fitness">Fitness</option>
+                                    <option value="diet">Diet</option>
+                                    <option value="holistic-health">Holistic Health</option>
+                                    <option value="medicine">Medicine</option>
+                                    <option value="public-health">Public Health</option>
+                                </optgroup>
+                        
+                                <!-- Education, Learning & Career -->
+                                <optgroup label="Education, Learning & Career">
+                                    <option value="education">Education</option>
+                                    <option value="personal-development">Personal Development</option>
+                                    <option value="online-learning">Online Learning</option>
+                                    <option value="career">Career</option>
+                                    <option value="productivity">Productivity</option>
+                                    <option value="skill-development">Skill Development</option>
+                                    <option value="job-search">Job Search</option>
+                                    <option value="leadership">Leadership</option>
+                                </optgroup>
+                        
+                                <!-- News, Politics & Society -->
+                                <optgroup label="News, Politics & Society">
+                                    <option value="news">News</option>
+                                    <option value="politics">Politics</option>
+                                    <option value="opinion">Opinion</option>
+                                    <option value="world-news">World News</option>
+                                    <option value="social-justice">Social Justice</option>
+                                    <option value="current-events">Current Events</option>
+                                    <option value="law">Law</option>
+                                    <option value="government">Government</option>
+                                    <option value="economy">Economy</option>
+                                </optgroup>
+                        
+                                <!-- Environment, Sustainability & Nature -->
+                                <optgroup label="Environment, Sustainability & Nature">
+                                    <option value="environment">Environment</option>
+                                    <option value="sustainability">Sustainability</option>
+                                    <option value="climate-change">Climate Change</option>
+                                    <option value="wildlife">Wildlife</option>
+                                    <option value="conservation">Conservation</option>
+                                    <option value="renewable-energy">Renewable Energy</option>
+                                    <option value="ecology">Ecology</option>
+                                </optgroup>
+                        
+                                <!-- Technology & Gaming -->
+                                <optgroup label="Gaming">
+                                    <option value="gaming">Gaming</option>
+                                    <option value="e-sports">E-sports</option>
+                                    <option value="mobile-gaming">Mobile Gaming</option>
+                                    <option value="pc-gaming">PC Gaming</option>
+                                    <option value="console-gaming">Console Gaming</option>
+                                    <option value="vr-ar">VR/AR Gaming</option>
+                                    <option value="game-reviews">Game Reviews</option>
+                                    <option value="game-development">Game Development</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="content" class="form-label">Content</label>
+                            <textarea class="form-control" id="content" name="content" rows="10" placeholder="Write your blog content here" maxlength="20000" required></textarea>
+                            <div class="character-count" id="content-count">0/20000</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tags" class="form-label">Tags</label>
+                            <div class="tag-input" id="tagInputContainer">
+                                <input type="text" name="tags" id="tagInput" placeholder="Add a tag">
+                            </div>
+                            <div class="character-count" id="tags-count">0/100</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="author" class="form-label">Author Name</label>
+                            <input type="text" class="form-control" id="author" name="author" placeholder="Your name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Featured Image</label>
+                            <input class="form-control" type="file" id="image" name="image" accept="image/*">
+                            <img id="imagePreview" class="image-preview mt-3" />
+                        </div>
+                        <button type="button" class="btn btn-secondary w-100 mb-3" id="previewButton">Preview</button>
+                        <button type="submit" class="btn btn-primary w-100">Post Blog</button>
+                        <button type="button" class="btn btn-danger w-100 mt-2" id="clearButton">Clear</button>
+                        <div class="text-center mt-3">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- End of Blog Post Form -->
+
+                <!-- Sidebar -->
+
+                <!-- End of Sidebar -->
+            </div>
+        </div>
+    </section>
+    <!-- End of Posts -->
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h1 class="fw-bolder logo">Bloxy</h1>
+                    <hr>
+                    <ul class="links list-unstyled mb-5">
+                        <li class="text-decoration-none mb-2">
+                            <a href="">About</a>
+                        </li>
+                        <li class="text-decoration-none mb-2">
+                            <a href="">Privacy Policy</a>
+                        </li>
+                        <li class="text-decoration-none mb-2">
+                            <a href="">Disclaimer</a>
+                        </li>
+                        <li class="text-decoration-none mb-2">
+                            <a href="">Contact</a>
+                        </li>
+                        <li class="text-decoration-none mb-2">
+                            <a href="">RSS</a>
+                        </li>
+                    </ul>
+                    <span class="text-secondary">&copy; 2024 by KIMJU & TRC</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- End of Footer -->
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <!-- jQuery (for easy DOM manipulation) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var form = $('#blogForm');
+            var submitButton = form.find('button[type="submit"]');
+            var clearButton = $('#clearButton');
+            var previewButton = $('#previewButton');
+            var spinner = $('.spinner-border');
+            var titleInput = $('#title');
+            var contentInput = $('#content');
+            var tagInput = $('#tagInput');
+            var tagInputContainer = $('#tagInputContainer');
+            var titleCount = $('#title-count');
+            var contentCount = $('#content-count');
+            var tagsCount = $('#tags-count');
+            var imageInput = $('#image');
+            var imagePreview = $('#imagePreview');
+
+            // Title character count
+            titleInput.on('input', function () {
+                titleCount.text(`${this.value.length}/100`);
+            });
+
+            // Content character count
+            contentInput.on('input', function () {
+                contentCount.text(`${this.value.length}/20000`);
+            });
+
+            // Tag input functionality
+            tagInput.on('keypress', function (e) {
+                if (e.key === 'Enter' && this.value.trim() !== '') {
+                    e.preventDefault();
+                    var tag = $('<span class="tag"></span>').text(this.value.trim());
+                    var removeTag = $('<span class="remove-tag">&times;</span>');
+                    removeTag.on('click', function () {
+                        $(this).parent().remove();
+                        updateTagsCount();
+                    });
+                    tag.append(removeTag);
+                    tagInputContainer.append(tag);
+                    this.value = '';
+                    updateTagsCount();
+                }
+            });
+
+            function updateTagsCount() {
+                var tags = tagInputContainer.find('.tag').length;
+                tagsCount.text(`${tags}/10`);
+            }
+
+            // Image preview
+            imageInput.on('change', function () {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    imagePreview.attr('src', e.target.result);
+                };
+                reader.readAsDataURL(this.files[0]);
+            });
+
+            // Preview button functionality
+            previewButton.on('click', function () {
+                var previewModal = new bootstrap.Modal($('#previewModal'), {
+                    keyboard: false
+                });
+                $('#previewTitle').text(titleInput.val());
+                $('#previewContent').text(contentInput.val());
+                $('#previewCategory').text($('#category').val());
+                $('#previewTags').text(tagInputContainer.find('.tag').map(function () {
+                    return $(this).text().replace('×', '');
+                }).get().join(', '));
+                $('#previewAuthor').text($('#author').val());
+                previewModal.show();
+            });
+
+            // Clear button functionality
+            clearButton.on('click', function () {
+                form[0].reset();
+                titleCount.text('0/100');
+                contentCount.text('0/20000');
+                tagsCount.text('0/10');
+                tagInputContainer.find('.tag').remove();
+                imagePreview.attr('src', '');
+            });
+
+            // Auto save draft every 30 seconds
+            setInterval(function () {
+                localStorage.setItem('blogTitle', titleInput.val());
+                localStorage.setItem('blogContent', contentInput.val());
+                localStorage.setItem('blogTags', tagInputContainer.find('.tag').map(function () {
+                    return $(this).text().replace('×', '');
+                }).get().join(', '));
+                localStorage.setItem('blogCategory', $('#category').val());
+                localStorage.setItem('blogAuthor', $('#author').val());
+            }, 30000);
+
+            // Load saved draft
+            if (localStorage.getItem('blogTitle')) titleInput.val(localStorage.getItem('blogTitle'));
+            if (localStorage.getItem('blogContent')) contentInput.val(localStorage.getItem('blogContent'));
+            if (localStorage.getItem('blogTags')) {
+                localStorage.getItem('blogTags').split(', ').forEach(function (tagText) {
+                    var tag = $('<span class="tag"></span>').text(tagText);
+                    var removeTag = $('<span class="remove-tag">&times;</span>');
+                    removeTag.on('click', function () {
+                        $(this).parent().remove();
+                        updateTagsCount();
+                    });
+                    tag.append(removeTag);
+                    tagInputContainer.append(tag);
+                });
+                updateTagsCount();
+            }
+            if (localStorage.getItem('blogCategory')) $('#category').val(localStorage.getItem('blogCategory'));
+            if (localStorage.getItem('blogAuthor')) $('#author').val(localStorage.getItem('blogAuthor'));
+
+            // Form submission
+            form.on('submit', function (e) {
+                e.preventDefault();
+
+                var formData = new FormData(this);
+
+                spinner.show();
+                submitButton.prop('disabled', true);
+
+                const scheme = window.location.protocol; // e.g., 'http:' or 'https:'
+                const host = window.location.host;
+
+                fetch(`/bloxy/api/writer`, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    spinner.hide();
+                    submitButton.prop('disabled', false);
+
+                    if (data.status === 200) {
+                        showToast('success', 'Blog post created successfully!');
+                        form[0].reset();
+                        titleCount.text('0/100');
+                        contentCount.text('0/20000');
+                        tagsCount.text('0/10');
+                        tagInputContainer.find('.tag').remove();
+                        imagePreview.attr('src', '');
+                        localStorage.clear();
+                    } else {
+                        showToast('danger', 'Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    spinner.hide();
+                    submitButton.prop('disabled', false);
+                    showToast('danger', 'An error occurred: ' + error.message);
+                });
+            });
+
+            function showToast(type, message) {
+                var toastContainer = $('#toast-container');
+                if (!toastContainer.length) {
+                    toastContainer = $('<div id="toast-container" class="toast-container"></div>');
+                    $('body').append(toastContainer);
+                }
+
+                var toast = $(`
+                    <div class="toast align-items-center text-bg-${type} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="d-flex">
+                            <div class="toast-body">
+                                ${message}
+                            </div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>
+                `);
+
+                toastContainer.append(toast);
+                var bsToast = new bootstrap.Toast(toast[0]);
+                bsToast.show();
+
+                toast.on('hidden.bs.toast', function () {
+                    $(this).remove();
+                });
+            }
+        });
+    </script>
+
+    <!-- Preview Modal -->
+    <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="previewModalLabel">Blog Post Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h3 id="previewTitle"></h3>
+                    <p><strong>Category:</strong> <span id="previewCategory"></span></p>
+                    <p><strong>Tags:</strong> <span id="previewTags"></span></p>
+                    <p><strong>Author:</strong> <span id="previewAuthor"></span></p>
+                    <div id="previewContent"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/script.js' %}"></script>
+
+</body>
+
+</html>

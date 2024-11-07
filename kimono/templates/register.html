@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600&family=Satisfy&display=swap"
+        rel="stylesheet">
+
+    <title>Bloxy</title>
+
+    <style>
+        .spinner-border {
+            display: none;
+            width: 3rem;
+            height: 3rem;
+            border-width: 0.3rem;
+        }
+
+        .alert-container {
+            margin-bottom: 1rem;
+        }
+
+        .centered-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+
+<body class="p-0">
+    <section class="auth centered-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mx-auto">
+                    <div class="alert-container"></div>
+                    <div class="card custom-card custom-shadow p-3">
+                        <div class="card-body">
+                            <a href="/" class="fw-bolder fs-1 text-dark logo">Bloxy</a>
+                            <form id="registerForm" class="mb-4 mt-4">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Name</label>
+                                    <input type="text" name="name" class="form-control" id="name" required>
+                                    <div class="invalid-feedback">Please enter your name.</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email address</label>
+                                    <input type="email" name="email" class="form-control" id="email" required>
+                                    <div class="invalid-feedback">Please enter a valid email address.</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Password</label>
+                                    <input type="password" name="password" class="form-control" id="password" required>
+                                    <div class="invalid-feedback">Please enter your password.</div>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-dark rounded-pill">Sign Up</button>
+                                </div>
+                            </form>
+                            <div class="spinner-border text-primary mx-auto" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <a href="/bloxy/login" class="d-block mb-1">Already have an Account?</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+    </script>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const form = event.target;
+            if (!form.checkValidity()) {
+                event.stopPropagation();
+                form.classList.add('was-validated');
+                return;
+            }
+
+            form.classList.remove('was-validated');
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const spinner = document.querySelector('.spinner-border');
+            spinner.style.display = 'block';
+
+            const alertContainer = document.querySelector('.alert-container');
+            alertContainer.innerHTML = '';
+
+            const scheme = window.location.protocol; // e.g., 'http:' or 'https:'
+            const host = window.location.host;
+
+            fetch(`/bloxy/api/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, email, password })
+            })
+                .then(response => {
+                    spinner.style.display = 'none';
+                    if (response.ok) {
+                        return response.json().then(data => {
+                            const alertMessage = `<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                    ${data.res}
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                  </div>`;
+                            alertContainer.innerHTML = alertMessage;
+
+                            setTimeout(() => {
+                                window.location.href = '/bloxy/login';
+                            }, 3000);
+                        });
+                    } else {
+                        return response.json().then(data => {
+                            throw new Error(data.res);
+                        });
+                    }
+                })
+                .catch(error => {
+                    spinner.style.display = 'none';
+                    const alertMessage = `<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            Error: ${error.message}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                          </div>`;
+                    alertContainer.innerHTML = alertMessage;
+                });
+        });
+    </script>
+</body>
+
+</html>
