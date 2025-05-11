@@ -1,29 +1,47 @@
-# Ignore the .env folder
-.env/
-
-# Ignore all __pycache__ folders recursively
-**/__pycache__/
-
-# Other common Python-related ignores
-*.py[cod]
-*.pyo
-.Python
-env/
-venv/
-ENV/
-venv.bak/
-env.bak/
-
-# Byte-compiled / optimized / DLL files
+# Python bytecode files
 *.pyc
-*.pyd
 *.pyo
+*.pyd
+__pycache__/
+
+# Django-specific files
+*.log
+*.pot
+*.pyc
+*.db
+*.sqlite3
+*.db-journal
+
+# Virtual environment directories
+venv/
+env/
+.venv/
+.env/
+VirtualEnv
+.aquilify/
+
+# IDE and editor directories
+.idea/
+.vscode/
+
+# Distribution / packaging directories
+build/
+dist/
+*.egg-info/
+
+# Static and media files
+/static/
+/media/
+
+# PyCharm specific files
+.idea/
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
 
-# VSCode workspace settings (optional)
-.vscode/
+# Local settings
+local_settings.py
 
-# macOS files (optional)
-.DS_Store
+# Cache files
+*.bak
+*.swp

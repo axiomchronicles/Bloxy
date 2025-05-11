@@ -14,6 +14,32 @@ Bloxy is a user-friendly blogging platform designed for writing, reading, and in
 
 Try out Bloxy live by visiting: [Bloxy Live Preview](http://ec2-3-93-215-26.compute-1.amazonaws.com/bloxy/dashboard)
 
+---
+
+## 📸 Screenshots
+
+### 🏠 Home Page
+![Home](screenshots/1.png)
+
+### 🏠 Home Page
+![Home](screenshots/2.png)
+
+### 🏠 Content Reading
+![Home](screenshots/3.png)
+
+### 🏠 Comments Section
+![Home](screenshots/4.png)
+
+### 🏠 Content Writing
+![Home](screenshots/5.png)
+
+### 🏠 Login
+![Home](screenshots/6.png)
+
+### 🏠 Register
+![Home](screenshots/7.png)
+---
+
 > **Note:** This link points to the live version of Bloxy. Feel free to create, read, and comment on blogs to experience the platform in action.
 
 ## Tech Stack
